@@ -15,10 +15,12 @@
 
 using namespace std;
 
+// GLOBAL fUNCTIONS PROTOTYPE
+// Show A Message Before Operation Finishs
+char endMessage (const string&);
+
 // A Small Function For Drawing Lines With Specified Characters
-void drawLine(char ch, int size) {
-    for (int i{0}; i < size; ++i) cout << ch;
-}
+void drawLine (char, int);
 
 // Search For ID Function Prototype
 int searchByID (const string&);
@@ -32,12 +34,11 @@ int searchByLName (const string&);
 // Search For Phone Number Function Prototype
 int searchByPhnNum (const string&);
 
-// Constructor
-PhoneBook::PhoneBook (const string& ttl) {
-    setTitle(ttl);
-    file = ttl + ".dat";
-}
 
+
+
+// Constructor
+PhoneBook::PhoneBook (const string& ttl) {setTitle(ttl);}
 
 // Destructor
 PhoneBook::~PhoneBook () {}
@@ -49,22 +50,27 @@ void PhoneBook::add () {
     int key{firstEmptyRec()};
 
     // Read The Contact From User
+    cout << "Recieving Contact ...\n";
     Contact contact;
     cin >> contact;
     contact.setID(key);
 
-    // Open Random-Access File For Write
-    ofstream output{file, ios::in | ios::out | ios::binary};
-    if (!output) {
-        cerr << "File Couldn't Be Opened." << endl;
-        exit(EXIT_FAILURE);
-    }
+    char ans{endMessage("Add")};
+    if (ans == 'y') {
+        // Open Random-Access File For Write
+        ofstream output{file, ios::in | ios::out | ios::binary};
+        if (!output) {
+            cerr << "File Couldn't Be Opened." << endl;
+            exit(EXIT_FAILURE);
+        }
 
-    // Find The Record In File And Write Into It
-    output.seekp((key - 1) * sizeof(Contact));
-    writeIntoRec(contact);
-    
-    output.close();
+        // Find The Record In File And Write Into It
+        output.seekp((key - 1) * sizeof(Contact));
+        writeIntoRec(contact);
+        output.close();
+    } 
+
+    else cout << "Operation Cancelled!\n";
 }
 
 
@@ -74,22 +80,27 @@ void PhoneBook::remove () {
     // Get An ID From User And Search For It
     int id{searchByID(file)};
 
-    // Create A Blank Contact To Be Written In The Specified Record
-    // This Is Like Removing A Full Record
-    Contact blankContact;
+    char ans{endMessage("Remove")};
+    if (ans == 'y') {
+        // Create A Blank Contact To Be Written In The Specified Record
+        // This Is Like Removing A Full Record
+        Contact blankContact;
 
-    // Open Random-Access File For Write
-    ofstream output{file, ios::in | ios::out | ios::binary};
-    if (!output) {
-        cerr << "File Couldn't Be Opened." << endl;
-        exit(EXIT_FAILURE);
+        // Open Random-Access File For Write
+        ofstream output{file, ios::in | ios::out | ios::binary};
+        if (!output) {
+            cerr << "File Couldn't Be Opened." << endl;
+            exit(EXIT_FAILURE);
+        }
+
+        // Find The Record In File And Write Into It
+        output.seekp((id - 1) * sizeof(Contact));
+        writeIntoRec(blankContact);
+
+        output.close();
     }
 
-    // Find The Record In File And Write Into It
-    output.seekp((id - 1) * sizeof(Contact));
-    writeIntoRec(blankContact);
-    
-    output.close();
+    else cout << "Operation Cancelled!\n";
 }
 
 
@@ -100,30 +111,34 @@ void PhoneBook::edit () {
     int id{searchByID(file)};
 
     // This Contact Will Be Substitude
-    cout << "Recieving New Contact\n";
+    cout << "Recieving New Contact ...\n";
     Contact contact;
     cin >> contact;
     contact.setID(id);
 
-    // Open Random-Access File For Write
-    ofstream output{file, ios::in | ios::out | ios::binary};
-    if (!output) {
-        cerr << "File Couldn't Be Opened." << endl;
-        exit(EXIT_FAILURE);
-    }
+    char ans{endMessage("Edit")};
+    if (ans == 'y') {
+        // Open Random-Access File For Write
+        ofstream output{file, ios::in | ios::out | ios::binary};
+        if (!output) {
+            cerr << "File Couldn't Be Opened." << endl;
+            exit(EXIT_FAILURE);
+        }
 
-    // Find The Record In File And Write Into It
-    output.seekp((id - 1) * sizeof(Contact));
-    writeIntoRec(contact);
+        // Find The Record In File And Write Into It
+        output.seekp((id - 1) * sizeof(Contact));
+        writeIntoRec(contact);
+
+        output.close();
+    }
     
-    output.close();
+    else cout << "Operation Cancelled!\n";
 }
 
 
 
 void PhoneBook::list () {
     // Header For Displaying File Name
-    cout << endl;
     double shift{floor((84 - getTitle().size()) / 2)};
     drawLine('=', shift - 6); cout << ">>>>> ";
     cout << getTitle();
@@ -172,7 +187,7 @@ int PhoneBook::find () {
     cout << "2. Search By First Name\n";
     cout << "3. Search By Last Name\n";
     cout << "4. Search By Phone Number\n";
-    
+
     // Get The Choice From User
     int choice;
     do {
@@ -182,7 +197,7 @@ int PhoneBook::find () {
             static_cast<patternType>(choice) > patternType::PHONENUMBER);
 
 
-    // Regarding To The Choice Handle
+    // Regarding To The Choice, Handle.
     int results;
     switch (static_cast<patternType>(choice)) {
         case patternType::ID:
@@ -192,7 +207,7 @@ int PhoneBook::find () {
         case patternType::FNAME:
             results = searchByFName(file);
             return results;
-            
+
         case patternType::LNAME:
             results = searchByLName(file);
             return results;
@@ -210,7 +225,10 @@ int PhoneBook::find () {
 
 
 
-void PhoneBook::setTitle (const string& title) {this->title = title;}
+void PhoneBook::setTitle (const string& title) {
+    this->title = title;
+    file = title + ".dat";
+}
 
 string PhoneBook::getTitle () const {return title;}
 
@@ -241,6 +259,21 @@ int PhoneBook::firstEmptyRec () {
 }
 
 
+// Show A Message Before Operation Finishs
+char endMessage (const string& op) {
+    cout << "\nAre You Sure To " << op << " This Contact(y/n)? ";
+    char ans;
+    cin >> ans;
+    return ans;
+}
+
+// A Small Function For Drawing Lines With Specified Characters
+void drawLine(char ch, int size) {
+    for (int i{0}; i < size; ++i) cout << ch;
+}
+
+
+
 // Search By ID [GLOB]
 int searchByID (const string& file) {
     // Open File For Read
@@ -259,8 +292,9 @@ int searchByID (const string& file) {
     Contact contact;
     input.seekg((id - 1) * sizeof(Contact));
     readFromRec(contact);
+    drawLine('-', 84);
     cout << contact;
-       
+
     input.close();
     return id;
 }
@@ -292,7 +326,7 @@ int searchByFName (const string& file) {
         }
         readFromRec(contact); 
     }
-       
+
     input.close();
     return results;
 }
@@ -324,7 +358,7 @@ int searchByLName (const string& file) {
         }
         readFromRec(contact); 
     }
-       
+
     input.close();
     return results;
 }
@@ -356,7 +390,7 @@ int searchByPhnNum (const string& file) {
         }
         readFromRec(contact); 
     }
-       
+
     input.close();
     return results;
 }

@@ -6,11 +6,13 @@
 
 using namespace std;
 
+void drawLine (char, int);
+
 ostream& operator<< (ostream& output, const Contact& contact) {
     output << "#" << left << setw(5) << contact.getID() << setw(22) <<
         contact.getFName() << setw(30) << contact.getLName() <<
         setw(18) << contact.getPhnNum() << endl;
-    output << "------------------------------------------------------------------------------------\n";
+        drawLine('-', 84);
     return output;
 }
 
@@ -81,3 +83,4 @@ void Contact::setPhnNum (const string& phnNum) {
 }
 
 const char* Contact::getPhnNum () const {return phnNum;}
+
