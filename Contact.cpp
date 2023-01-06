@@ -2,14 +2,14 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include "contact.h"
+#include "Contact.h"
 
 using namespace std;
 
 ostream& operator<< (ostream& output, const Contact& contact) {
-    output << "#" << left << setw(5) << contact.getID() << setw(15) <<
-        contact.getFName() << setw(25) << contact.getLName() <<
-        setw(12) << contact.getPhnNum() << endl;
+    output << "#" << left << setw(5) << contact.getID() << setw(22) <<
+        contact.getFName() << setw(30) << contact.getLName() <<
+        setw(18) << contact.getPhnNum() << endl;
     output << "------------------------------------------------------------------------------------\n";
     return output;
 }
