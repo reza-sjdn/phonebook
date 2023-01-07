@@ -13,6 +13,7 @@ ostream& operator<< (ostream& output, const Contact& contact) {
         contact.getFName() << setw(30) << contact.getLName() <<
         setw(18) << contact.getPhnNum() << endl;
         drawLine('-', 84);
+        cout << endl;
     return output;
 }
 
