@@ -293,6 +293,7 @@ int searchByID (const string& file) {
     input.seekg((id - 1) * sizeof(Contact));
     readFromRec(contact);
     drawLine('-', 84);
+    cout << endl;
     cout << contact;
 
     input.close();
@@ -313,7 +314,8 @@ int searchByFName (const string& file) {
     // Get First Name From User
     cout << "Enter First Name: ";
     string fName;
-    cin >> fName;
+    cin.ignore();
+    getline(cin, fName);
 
     // Search For First Name
     Contact contact;
@@ -345,7 +347,8 @@ int searchByLName (const string& file) {
     // Get Last Name From User
     cout << "Enter Last Name: ";
     string lName;
-    cin >> lName;
+    cin.ignore();
+    getline(cin, lName);
 
     // Search For Last Name
     Contact contact;
@@ -377,7 +380,8 @@ int searchByPhnNum (const string& file) {
     // Get Phone Number From User
     cout << "Enter Phone Number: ";
     string phnNum; 
-    cin >> phnNum;
+    cin.ignore();
+    getline(cin, phnNum);
 
     // Search For Phone Number
     Contact contact;

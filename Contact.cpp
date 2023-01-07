@@ -19,19 +19,20 @@ ostream& operator<< (ostream& output, const Contact& contact) {
 
 
 istream& operator>> (istream& input, Contact& contact) {
+    cin.ignore();
     cout << "Enter First Name: ";
     string fName;
-    input >> fName;
+    getline(input, fName);
     contact.setFName(fName);
 
     cout << "Enter Last Name: ";
     string lName;
-    input >> lName;
+    getline(input, lName);
     contact.setLName(lName);
 
     cout << "Enter Phone Number: ";
     string phnNum;
-    input >> phnNum;
+    getline(input, phnNum);
     contact.setPhnNum(phnNum);
 
     return input;
@@ -68,7 +69,7 @@ const char* Contact::getFName () const {return fName;}
 
 void Contact::setLName (const string& lName) {
     size_t length{lName.size()};
-    length = (length < 15 ? length : 14);
+    length = (length < 25 ? length : 24);
     lName.copy(this->lName, length);
     this->lName[length] = '\0';
 }
@@ -78,7 +79,7 @@ const char* Contact::getLName () const {return lName;}
 
 void Contact::setPhnNum (const string& phnNum) {
     size_t length{phnNum.size()};
-    length = (length < 15 ? length : 14);
+    length = (length < 18 ? length : 17);
     phnNum.copy(this->phnNum, length);
     this->phnNum[length] = '\0';
 }

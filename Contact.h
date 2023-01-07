@@ -28,7 +28,7 @@ private:
     int id;
     char fName[15];
     char lName[25];
-    char phnNum[12];
+    char phnNum[18];
 };
 
 #endif
