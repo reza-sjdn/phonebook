@@ -111,12 +111,43 @@ void PhoneBook::remove () {
 void PhoneBook::edit () {
     // Get An ID From User And Search For It
     int id{searchByID(file)};
+    Contact originalContact;
 
+    // Open File For Read
+    ifstream input{file, ios::in | ios::binary};
+    if (!input) {
+        cerr << "File Couldn't Be Opened." << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // Populate Original Contact
+    input.seekg((id - 1) * sizeof(Contact));
+    readFromRec(originalContact);
+    input.close();
+    
     // This Contact Will Be Substitude
+    // If User At Each Input Enters "." The Input Will Be Left Not Changed!
     cout << "Recieving New Contact ...\n";
-    Contact contact;
-    cin >> contact;
-    contact.setID(id);
+    cin.ignore();
+    cout << "Enter First Name: ";
+    string fName;
+    getline(cin, fName);
+    if (fName == ".") fName = originalContact.getFName();
+    
+    cout << "Enter Last Name: ";
+    string lName;
+    getline(cin, lName);
+    if (lName == ".") lName = originalContact.getLName();
+
+    cout << "Enter Phone Number: ";
+    string phnNum;
+    getline(cin, phnNum);
+    if (phnNum == ".") phnNum = originalContact.getPhnNum();
+
+
+
+    // Final Edited Contact
+    Contact editedContact{id, fName, lName, phnNum};
 
     char ans{endMessage("Edit")};
     if (ans == 'y') {
@@ -129,7 +160,7 @@ void PhoneBook::edit () {
 
         // Find The Record In File And Write Into It
         output.seekp((id - 1) * sizeof(Contact));
-        writeIntoRec(contact);
+        writeIntoRec(editedContact);
 
         output.close();
     }
