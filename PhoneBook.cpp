@@ -2,8 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <iomanip>
 #include <cmath>
+#include <cstdlib>
 #include "PhoneBook.h"
 #include "Contact.h"
 
@@ -313,16 +315,18 @@ int searchByFName (const string& file) {
 
     // Get First Name From User
     cout << "Enter First Name: ";
-    string fName;
+    char fName[15];
     cin.ignore();
-    getline(cin, fName);
+    cin.get(fName, 15);
 
     // Search For First Name
     Contact contact;
     int results{0};
     readFromRec(contact);
     while (input) {
-        if (fName == contact.getFName()) {
+        // It's Not Needed The Whole String, But Part Of It Is Enough
+        // To Search All The Occurences
+        if (strstr(contact.getFName(), fName) != nullptr) {
             cout << contact;
             ++results;
         }
@@ -346,16 +350,18 @@ int searchByLName (const string& file) {
 
     // Get Last Name From User
     cout << "Enter Last Name: ";
-    string lName;
+    char lName[25];
     cin.ignore();
-    getline(cin, lName);
+    cin.get(lName, 25);
 
     // Search For Last Name
     Contact contact;
     int results{0};
     readFromRec(contact);
     while (input) {
-        if (lName == contact.getLName()) {
+        // It's Not Needed The Whole String, But Part Of It Is Enough
+        // To Search All The Occurences
+        if (strstr(contact.getLName(), lName) != nullptr) {
             cout << contact;
             ++results;
         }
@@ -379,16 +385,18 @@ int searchByPhnNum (const string& file) {
 
     // Get Phone Number From User
     cout << "Enter Phone Number: ";
-    string phnNum; 
+    char phnNum[18]; 
     cin.ignore();
-    getline(cin, phnNum);
+    cin.get(phnNum, 18);
 
     // Search For Phone Number
     Contact contact;
     int results{0};
     readFromRec(contact);
     while (input) {
-        if (phnNum == contact.getPhnNum()) {
+        // It's Not Needed The Whole String, But Part Of It Is Enough
+        // To Search All The Occurences
+        if (strstr(contact.getPhnNum(), phnNum) != nullptr) {
             cout << contact;
             ++results;
         }
