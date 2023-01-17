@@ -8,6 +8,10 @@ using namespace std;
 
 void drawLine (char, int);
 
+// Format Strings
+void formStr (string&);
+
+
 ostream& operator<< (ostream& output, const Contact& contact) {
     output << "#" << left << setw(5) << contact.getID() << setw(22) <<
         contact.getFName() << setw(30) << contact.getLName() <<
@@ -23,11 +27,13 @@ istream& operator>> (istream& input, Contact& contact) {
     cout << "Enter First Name: ";
     string fName;
     getline(input, fName);
+    formStr(fName);
     contact.setFName(fName);
 
     cout << "Enter Last Name: ";
     string lName;
     getline(input, lName);
+    formStr(lName);
     contact.setLName(lName);
 
     cout << "Enter Phone Number: ";
@@ -86,3 +92,11 @@ void Contact::setPhnNum (const string& phnNum) {
 
 const char* Contact::getPhnNum () const {return phnNum;}
 
+
+// Format Strings
+void formStr (string& str) {
+    if (islower(str[0])) str[0] = toupper(str[0]);
+    for (size_t i{1}; i < str.size(); ++i) {
+        if (isupper(str[i])) str[i] = tolower(str[i]);
+    }
+}
