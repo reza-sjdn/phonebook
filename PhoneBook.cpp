@@ -5,7 +5,8 @@
 #include <cstring>
 #include <iomanip>
 #include <cmath>
-#include <cstdlib>
+#include <vector>
+#include <algorithm>
 #include "PhoneBook.h"
 #include "Contact.h"
 
@@ -35,6 +36,12 @@ int searchByLName (const string&);
 
 // Search For Phone Number Function Prototype
 int searchByPhnNum (const string&);
+
+// Sort Contacts By Name
+bool sortByName (const Contact&, const Contact&);
+
+// Convert CString To String Class
+string cstrToStr (const char*);
 
 
 
@@ -191,18 +198,26 @@ void PhoneBook::list () {
         exit(EXIT_FAILURE);
     }
 
-    // Read From File And Display It
+    // Read From File And Populate The Vector For Sorting
     int numOfContacts{0};
     Contact contact;
+    vector<Contact> vect;
     readFromRec(contact);
     while(input) {
         if (contact.getID() != 0) {
-            cout << contact;
+            vect.push_back(contact);
             ++numOfContacts;
         }
         readFromRec(contact);
     }
 
+    // Sort Then Display
+    sort(vect.begin(), vect.end(), sortByName);
+    for (Contact contact : vect) {
+        cout << contact;
+    }
+
+    // Display The Number Of Contacts
     cout << numOfContacts << " Contacts." << endl;
 
     input.close();
@@ -436,4 +451,27 @@ int searchByPhnNum (const string& file) {
 
     input.close();
     return results;
+}
+
+
+// Sort Contacts By Name
+bool sortByName (const Contact& a, const Contact& b) {
+    const char* a_cstr{a.getFName()};
+    const char* b_cstr{b.getFName()};
+    string a_str{cstrToStr(a_cstr)};
+    string b_str{cstrToStr(b_cstr)};
+    return a_str < b_str;
+}
+
+
+// Convert CString To String Class
+string cstrToStr (const char* cstr) {
+    string str;
+    size_t i{0};
+    while (cstr[i] != '\0') {
+        str += cstr[i];
+        ++i;
+    }
+    str += '\0';
+    return str;
 }
